@@ -1,23 +1,34 @@
 # Node modules
 node_modules/
-npm-debug.log
-yarn-error.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
-# Environment files
+# Environment variables
 .env
 .env.local
 .env.development
 .env.test
 .env.production
 
-# Next.js build output
+# Build files
 frontend/.next/
 frontend/out/
+frontend/build/
 
-# Log files
-logs/
-*.log
+# Testing
+coverage/
 
-# OS files
+# Misc
 .DS_Store
-Thumbs.db
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Vercel
+.vercel
