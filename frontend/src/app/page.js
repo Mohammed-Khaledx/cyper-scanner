@@ -1,41 +1,41 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import "./style.css";
 
 export default function Home() {
   const [url, setUrl] = useState("");
-  const [scanResult, setScanResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   const scanWebsite = async () => {
     if (!url) {
       setError("Please enter a URL");
       return;
     }
-    
-    // Clear previous results and errors
-    setScanResult(null);
+
     setError(null);
     setIsLoading(true);
-    
 
     try {
-      // Ensure URL has protocol
-      const normalizedUrl = url.startsWith('http') ? url : `http://${url}`;
-      
+      const normalizedUrl = url.startsWith("http") ? url : `http://${url}`;
+
       const res = await fetch("http://localhost:5000/api/scan", {
         method: "POST",
         body: JSON.stringify({ url: normalizedUrl }),
         headers: { "Content-Type": "application/json" },
       });
-      
+
       const data = await res.json();
-      
+
       if (!res.ok) {
-        throw new Error(data.error || data.details || "Scan failed");
+        throw new Error(data.error || "Scan failed");
       }
-      
-      setScanResult(data.scan);
+
+      router.push(`/report?data=${encodeURIComponent(JSON.stringify(data.scan))}`);
     } catch (error) {
       console.error("Scan error:", error);
       setError(error.message || "Failed to complete scan");
@@ -46,42 +46,51 @@ export default function Home() {
 
   return (
     <main className="p-4">
-      <h1 className="text-xl font-bold">Website Vulnerability Scanner</h1>
-      <div className="flex flex-col md:flex-row mt-4">
-        <input
-          type="text"
-          className="border p-2 w-full md:w-auto"
-          placeholder="Enter website URL (e.g. https://example.com)"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
-        <button 
-          className={`bg-blue-500 text-white p-2 mt-2 md:mt-0 md:ml-2 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`} 
-          onClick={scanWebsite}
-          disabled={isLoading}
-        >
-          {isLoading ? 'Scanning...' : 'Scan'}
-        </button>
+      <header className="header">
+        <Link href="/" className="logo">Scanner</Link>
+        <nav className="navbar">
+          <Link href="/" className="active">Home</Link>
+          <Link href="/about">About</Link>
+        </nav>
+      </header>
+
+      <div className="home">
+        <div className="background-image">
+          <Image src="/m2.png" alt="Background" fill objectFit="cover" priority />
+        </div>
+        <div className="home-content">
+          <h1>Web Vulnerability Scanner</h1>
+          <h3>Welcome, User!</h3>
+          <p>
+            "We appreciate you using our platform 💙
+            <br />
+            Your website’s security is our priority!"
+          </p>
+
+          <div className="custom-search">
+            <input
+              type="text"
+              className="custom-search-input"
+              placeholder="Enter website URL"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+            />
+
+            <button
+              className="custom-search-button"
+              onClick={scanWebsite}
+              disabled={isLoading}
+            >
+              {isLoading ? "Scanning..." : "Scan"}
+            </button>
+          </div>
+        </div>
       </div>
 
       {error && (
         <div className="mt-4 p-2 border border-red-500 bg-red-50 text-red-800">
           <h2 className="text-lg font-semibold">Error</h2>
           <p>{error}</p>
-        </div>
-      )}
-
-      {isLoading && (
-        <div className="mt-4 p-2 border">
-          <h2 className="text-lg font-semibold">Scanning in progress...</h2>
-          <p>This may take several minutes depending on the target website.</p>
-        </div>
-      )}
-
-      {scanResult && (
-        <div className="mt-4 p-2 border">
-          <h2 className="text-lg font-semibold">Scan Report</h2>
-          <pre className="overflow-x-auto bg-gray-50 p-2 mt-2">{JSON.stringify(scanResult.results, null, 2)}</pre>
         </div>
       )}
     </main>
