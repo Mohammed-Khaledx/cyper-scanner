@@ -1,0 +1,47 @@
+.report-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: url("/bg.png") no-repeat center center/cover;
+    color: white;
+    padding: 20px;
+  }
+  
+  .report-content {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    max-width: 800px;
+    width: 100%;
+  }
+  
+  .scan-output {
+    text-align: left;
+    background: #222;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    max-height: 400px;
+    white-space: pre-wrap;
+  }
+  
+  .contact-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 24px;
+    background-color: #00abf0;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 100px;
+    transition: 0.3s;
+  }
+  
+  .contact-button:hover {
+    background-color: #008ecf;
+  }
+  
